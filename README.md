@@ -1,3 +1,4 @@
+Repository contenente webapi che gestisce la pubblicazione di notizie in stile TG
 WEB API STRUTTURATA SU 3 PROGETTI :
 -MyNewsApi (BACKEND)
 -MyNewsApi.Frontend(FRONTEND)
