@@ -1,0 +1,42 @@
+﻿@using MudBlazor
+
+<CascadingValue Value="@myCustomTheme">
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MyNewsApi.Frontend.Layout.MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MyNewsApi.Frontend.Layout.MainLayout)">
+                <h1>Pagina non trovata</h1>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingValue>
+
+@code {
+    MudTheme myCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = Colors.Blue.Default,
+                Secondary = Colors.Green.Accent4,
+            // Altre proprietà opzionali possono essere aggiunte qui.
+            },
+            Typography = new Typography()
+            {
+                Default = new DefaultTypography()
+                {
+                    FontFamily = new string[] { "Roboto", "sans-serif" },
+                    FontSize = "16px" // Deve essere una stringa, es. "16px"
+                },
+                H6 = new H6Typography()
+                {
+                    FontFamily = new string[] { "Roboto", "sans-serif" },
+                    FontSize = "20px",   // Anche questo come stringa
+                    FontWeight = "600"   // Se la proprietà si aspetta una stringa;
+                // in ogni caso verifica la documentazione (alcune versioni potrebbero accettare un int)
+                }
+            // Puoi personalizzare ulteriormente altri stili tipografici (Body, Button, Subtitle, ecc.).
+            }
+        };
+}

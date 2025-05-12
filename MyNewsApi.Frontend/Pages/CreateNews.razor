@@ -1,0 +1,53 @@
+﻿@page "/create-news"
+@inject INewsService NewsService
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+
+<MudContainer Class="pa-4">
+    <MudPaper Class="pa-4" Elevation="2">
+        <MudText Typo="Typo.h4" Class="mb-4">Crea una Nuova Notizia</MudText>
+
+        <EditForm Model="newNews" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudTextField @bind-Value="newNews.Title"
+                          Label="Titolo" Variant="Variant.Outlined"
+                          Class="mb-4" />
+            <MudTextField @bind-Value="newNews.Content"
+                          Label="Contenuto" Variant="Variant.Outlined"
+                          Class="mb-4" Lines="4" />
+
+            <MudSelect T="int" @bind-Value="newNews.CategoryId"
+                       Label="Categoria" Variant="Variant.Outlined"
+                       Class="mb-4">
+                <MudSelectItem Value="0">-- Seleziona Categoria --</MudSelectItem>
+                @foreach (var cat in categories)
+                {
+                    <MudSelectItem Value="@cat.Id">@cat.Name</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled"
+                       ButtonType="ButtonType.Submit">
+                Crea Notizia
+            </MudButton>
+        </EditForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private NewsDto newNews = new NewsDto();
+    private List<Category> categories = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await CategoryService.GetCategoriesAsync();
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        await NewsService.CreateNewsAsync(newNews);
+        Navigation.NavigateTo("/");
+    }
+}

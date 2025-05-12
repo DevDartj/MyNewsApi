@@ -1,0 +1,55 @@
+/* St/* Stili per la validazione degli input */
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
+/* Stili per il messaggio di errore globale Blazor */
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.75rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+    #blazor-error-ui .dismiss {
+        cursor: pointer;
+        position: absolute;
+        right: 1rem;
+        top: 0.5rem;
+    }
+
+.blazor-error-boundary {
+    background: #b32121;
+    padding: 1rem;
+    color: white;
+}
+
+    .blazor-error-boundary::after {
+        content: "An error has occurred.";
+    }
+
+/* Stile per il blocco di codice */
+code {
+    color: #c02d76;
+}
+
+
+
+/* (Opzionale) Regola globale per il body, se non vuoi affidarti solo al tema MudBlazor */
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}

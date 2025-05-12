@@ -1,0 +1,79 @@
+﻿@page "/"
+@using MudBlazor
+@inject IAuthService AuthService
+@inject INewsService NewsService
+@inject NavigationManager Navigation
+
+<MudContainer Class="pa-4">
+    <MudText Typo="Typo.h3" Align="@MudBlazor.Align.Center" Class="mb-4">
+        Notizie
+    </MudText>
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <MudAlert Severity="Severity.Error" Elevation="4" Class="mb-4">
+            @errorMessage
+        </MudAlert>
+    }
+    else if (newsList == null)
+    {
+        <MudStack Spacing="2" AlignItems="@(MudBlazor.AlignItems.Center)">
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary"
+                                 Style="width:60px; height:60px;" />
+            <MudText Typo="Typo.subtitle2">Caricamento in corso…</MudText>
+        </MudStack>
+    }
+    else if (!newsList.Any())
+    {
+        <MudText Typo="Typo.subtitle1" Align="@MudBlazor.Align.Center">
+            Nessuna notizia disponibile.
+        </MudText>
+    }
+    else
+    {
+        <MudGrid Gutter="16px">
+            @foreach (var item in newsList)
+            {
+                <MudItem xs="12" sm="6" md="4" lg="3">
+                    <MudCard Class="ma-2">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.h6">@item.Title</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            <MudText Typo="Typo.body2">@item.Content</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudText Typo="Typo.caption">
+                                <strong>Categoria Id:</strong> @item.CategoryId
+                            </MudText>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    </MudContainer>
+
+    @code {
+    private List<News>? newsList;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await AuthService.GetTokenAsync();
+        if (string.IsNullOrEmpty(token))
+        {
+            errorMessage = "Effettua il login per visualizzare le notizie.";
+            return;
+        }
+
+        try
+        {
+            newsList = await NewsService.GetNewsAsync();
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Errore durante il caricamento delle notizie: {ex.Message}";
+        }
+    }
+}

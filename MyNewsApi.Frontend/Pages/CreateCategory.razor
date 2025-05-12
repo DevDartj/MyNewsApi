@@ -1,0 +1,36 @@
+﻿@page "/create-category"
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+
+<MudContainer Class="pa-4">
+    <MudPaper Class="pa-4" Elevation="2">
+        <MudText Typo="Typo.h4" Class="mb-4">Crea una Nuova Categoria</MudText>
+
+        <EditForm Model="newCategory" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudTextField @bind-Value="newCategory.Name"
+                          Label="Nome" Variant="Variant.Outlined"
+                          Class="mb-4" />
+            <MudTextField @bind-Value="newCategory.Description"
+                          Label="Descrizione" Variant="Variant.Outlined"
+                          Class="mb-4" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled"
+                       ButtonType="ButtonType.Submit">
+                Crea Categoria
+            </MudButton>
+        </EditForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private CategoryCreateDto newCategory = new CategoryCreateDto();
+
+    private async Task HandleValidSubmit()
+    {
+        await CategoryService.CreateCategoryAsync(newCategory);
+        Navigation.NavigateTo("/");
+    }
+}

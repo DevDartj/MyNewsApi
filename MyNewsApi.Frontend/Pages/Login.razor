@@ -1,0 +1,51 @@
+﻿@page "/login"
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+
+<MudContainer Class="pa-4">
+    <MudPaper Class="pa-4" Elevation="2">
+        <MudText Typo="Typo.h4" Class="mb-4">Login</MudText>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">
+                @errorMessage
+            </MudAlert>
+        }
+
+        <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudTextField @bind-Value="loginModel.Email"
+                          Label="Email" Variant="Variant.Outlined"
+                          Class="mb-4" />
+            <MudTextField @bind-Value="loginModel.Password"
+                          Label="Password" Variant="Variant.Outlined"
+                          InputType="InputType.Password" Class="mb-4" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled"
+                       ButtonType="ButtonType.Submit">
+                Login
+            </MudButton>
+        </EditForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private LoginDto loginModel = new LoginDto();
+    private string errorMessage = string.Empty;
+
+    private async Task HandleLogin()
+    {
+        var result = await AuthService.LoginAsync(loginModel);
+        if (result.IsSuccess)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = result.Error ?? "Login fallito";
+        }
+    }
+}

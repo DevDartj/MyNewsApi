@@ -1,0 +1,54 @@
+﻿@page "/register"
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+
+<MudContainer Class="pa-4">
+    <MudPaper Class="pa-4" Elevation="2">
+        <MudText Typo="Typo.h4" Class="mb-4">Registrazione</MudText>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <MudAlert Severity="Severity.Error" Class="mb-4">
+                @errorMessage
+            </MudAlert>
+        }
+
+        <EditForm Model="registerModel" OnValidSubmit="HandleRegister">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <MudTextField @bind-Value="registerModel.Email"
+                          Label="Email" Variant="Variant.Outlined"
+                          Class="mb-4" />
+            <MudTextField @bind-Value="registerModel.Password"
+                          Label="Password" Variant="Variant.Outlined"
+                          InputType="InputType.Password" Class="mb-4" />
+            <MudTextField @bind-Value="registerModel.ConfirmPassword"
+                          Label="Conferma Password" Variant="Variant.Outlined"
+                          InputType="InputType.Password" Class="mb-4" />
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled"
+                       ButtonType="ButtonType.Submit">
+                Registrati
+            </MudButton>
+        </EditForm>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private RegisterDto registerModel = new RegisterDto();
+    private string errorMessage = string.Empty;
+
+    private async Task HandleRegister()
+    {
+        bool success = await AuthService.RegisterAsync(registerModel);
+        if (success)
+        {
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = "Errore nella registrazione. Riprova.";
+        }
+    }
+}

@@ -1,0 +1,41 @@
+﻿@using MudBlazor
+@inherits LayoutComponentBase
+
+<MudLayout>
+    <!-- Barra superiore fissa -->
+    <MudAppBar Fixed="true" Color="Color.Primary" Elevation="4">
+        <!-- Mostra il pulsante hamburger solo su dispositivi piccoli -->
+        <MudHidden Breakpoint="Breakpoint.MdAndUp">
+            <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                           OnClick="ToggleDrawer"
+                           Color="Color.Inherit" />
+        </MudHidden>
+        <MudText Typo="Typo.h6" Class="ml-2">
+            MyNewsApi Frontend
+        </MudText>
+        <MudSpacer />
+    </MudAppBar>
+
+    <!-- Menu laterale persistente: sui dispositivi più grandi rimane sempre visibile,
+         così il contenuto principale verrà correttamente spostato -->
+    <MudDrawer @bind-Open="_drawerOpen"
+               Variant="DrawerVariant.Persistent"
+               ClipMode="DrawerClipMode.Always"
+               Elevation="1">
+        <NavMenu />
+    </MudDrawer>
+
+    <!-- Contenuto principale: aggiungiamo un margine superiore per compensare l'AppBar fissa -->
+    <MudMainContent Class="p-4" Style="margin-top:64px;">
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool _drawerOpen = true;
+
+    private void ToggleDrawer()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}
